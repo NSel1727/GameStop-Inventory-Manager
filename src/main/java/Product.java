@@ -10,17 +10,17 @@ public class Product {
         this.websiteLink = websiteLink;
     }
 
-    private String getName()
+    public String getName()
     {
         return this.name;
     }
 
-    private double getValue()
+    public double getValue()
     {
         return this.value;
     }
 
-    private String getWebsiteLink()
+    public String getWebsiteLink()
     {
         return this.websiteLink;
     }

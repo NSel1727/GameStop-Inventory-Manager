@@ -9,11 +9,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
-import java.util.*;
-
 public class Website {
 
-    public String getLink(String name, String console)
+    public static String getLink(String name, String console)
     {
         try{
             Document doc = Jsoup.connect("https://www.google.com.au/search?q=gamestop" + name + console).get();
@@ -21,35 +19,56 @@ public class Website {
             Element firstLink = links.first();
             return firstLink.getElementsByTag("a").first().attr("href");
         }catch(Exception ex){
-            System.out.println("An error has occurred :(");
+            System.out.println("An error has occurred.");
         }
         return null;
     }
 
-    public double getPrice(URL url)
+    public static double getPrice(URL url)
     {
         try {
-            System.out.println(url.toString());
             URLConnection connection = url.openConnection();
             InputStream is = connection.getInputStream();
             Scanner scan = new Scanner(new InputStreamReader(is));
-            String string = "";
 
-            for(int i = 0; i < 5; i++)
+            String curLine = "";
+
+            String result = "";
+
+            int i;
+
+            loop:
+
+            for(i = 0; i < 6; i++)
             {
-                while (!(string.contains("<span class=\"actual-price \">"))) {
-                    string = scan.nextLine();
+
+                while (!(curLine.contains("<span class=\"actual-price \">"))) {
+                    if(!scan.hasNextLine())
+                    {
+                        break loop;
+                    }
+                    curLine = scan.nextLine();
                 }
 
-                while(!string.contains("$"))
+                while(!curLine.contains("$"))
                 {
-                    string = scan.nextLine();
-
+                    if(!scan.hasNextLine())
+                    {
+                        break loop;
+                    }
+                    curLine = scan.nextLine();
                 }
+
+                result = curLine;
             }
-            return Double.parseDouble(string.trim().substring(1));
-        }catch(java.io.IOException ex){
-            System.out.println("\nAn error has occurred. :( \n");
+
+            if(i < 5)
+            {
+                throw new Exception();
+            }
+            return Double.parseDouble(result.trim().substring(1));
+        }catch(Exception ex){
+            System.out.println("\nAn error has occurred. A price may not be available for this product");
         }
         return -1;
     }

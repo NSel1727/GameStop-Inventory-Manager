@@ -1,6 +1,46 @@
 @startuml
 'https://plantuml.com/sequence-diagram
 
-autonumber
+class Application{
+    main()
+}
+
+class Manager{
+    double budget
+    double originalBudget
+    List<Product> productList
+    List<Integer> indexes
+
+    displayList()
+    deleteProducts()
+    int getIndexes()
+    List<Products> makeList()
+}
+
+class Output{
+    generateOutputFile()
+    File getFile()
+}
+
+class Product{
+    String name
+    String websiteLink
+    double value
+
+    getName()
+    getValue()
+    getWebsiteLink()
+}
+
+class Website{
+    String getLink()
+    double getPrice()
+}
+
+Product o-- Manager
+Output o-- Application
+Manager o-- Application
+Website o-- Manager
+
 
 @enduml
